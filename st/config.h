@@ -5,8 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "SauceCodePro NF:pixelsize=26:antialias=true:autohint=true";
-static int borderpx = 10;
+static char *font = "SauceCodePro NF:pixelsize=30:antialias=true:autohint=true";
+static int borderpx = 12;
 
 /*
  * What program is execed by st depends of these precedence rules:
