@@ -73,7 +73,7 @@ index 5e4d494..df6d0d7 100644
  	lrpad = drw->fonts->h;
  	bh = drw->fonts->h + 2;
 +	sp = sidepad;
-+	vp = (topbar == 1) ? vertpad : - vertpad;
++	vp = (topbar == 1) ? vertpad : 0;
  	updategeom();
 +
  	/* init atoms */
@@ -104,12 +104,12 @@ index 5e4d494..df6d0d7 100644
 -		m->wh -= bh;
 -		m->by = m->topbar ? m->wy : m->wy + m->wh;
 -		m->wy = m->topbar ? m->wy + bh : m->wy;
-+		m->wh = m->wh - vertpad - bh;
-+		m->by = m->topbar ? m->wy : m->wy + m->wh + vertpad;
++		m->wh = m->wh - bh;
++		m->by = m->topbar ? m->wy + vp : m->wy + m->wh;
 +		m->wy = m->topbar ? m->wy + bh + vp : m->wy;
  	} else
 -		m->by = -bh;
-+		m->by = -bh - vp;
++		m->by = -bh;
  }
  
  void
