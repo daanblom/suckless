@@ -2,6 +2,7 @@
 static const Block blocks[] = {
 	/*Icon*/	/*Command*/		/*Update Interval*/	/*Update Signal*/
 	{"", "/home/db/.me/scripts/dwmMusic",					5,		1},
+	{"", "/home/db/.me/scripts/checkTorrents",					30,		2},
 	{"", "currentWeather",					120,		0},
 	/*{"", "crypt",					          120,		0},*/
 	/*{"", "apr",		            			120,		0},*/
