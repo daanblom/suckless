@@ -2,7 +2,7 @@
 #include "movestack.c"
 #define wal "/home/db/.cache/wal/colors-wal-dwm.h"
 
-static const unsigned int borderpx = 1; /* border pixel of windows */
+static const unsigned int borderpx = 2; /* border pixel of windows */
 static const Gap default_gap = {.isgap = 3, .realgap = 30, .gappx = 30};
 static const unsigned int snap = 32; /* snap pixel */
 static const int showbar = 1;        /* 0 means no bar */
