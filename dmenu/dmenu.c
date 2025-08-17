@@ -26,7 +26,7 @@
 #define TEXTW(X) (drw_fontset_getwidth(drw, (X)) + lrpad)
 
 /* enums */
-enum { SchemeNorm, SchemeSel, SchemeOut, SchemeLast }; /* color schemes */
+enum { SchemeNorm, SchemeSel, SchemeOut, SchemePlaceholder, SchemeLast };
 
 struct item {
   char *text;
@@ -142,54 +142,58 @@ static int drawitem(struct item *item, int x, int y, int w) {
   return drw_text(drw, x, y, w, bh, lrpad / 2, item->text, 0);
 }
 
-static void drawmenu(void) {
-  unsigned int curpos;
-  struct item *item;
-  int x = 0, y = 0, fh = drw->fonts->h, w;
+static void drawmenu(void)
+{
+	unsigned int curpos;
+	struct item *item;
+	int x = 0, y = 0, fh = drw->fonts->h, w;
 
-  drw_setscheme(drw, scheme[SchemeNorm]);
-  drw_rect(drw, 0, 0, mw, mh, 1, 1);
-
-  if (prompt && *prompt) {
-    drw_setscheme(drw, scheme[SchemeSel]);
-    x = drw_text(drw, x, 0, promptw, bh, lrpad / 2, prompt, 0);
-  }
-  /* draw input field */
-  w = (lines > 0 || !matches) ? mw - x : inputw;
 	drw_setscheme(drw, scheme[SchemeNorm]);
-  /* drw_text(drw, x, 0, w, bh, lrpad / 2, text, 0);rw_text(drw, x, 0, w, bh, lrpad / 2, text, 0); */
-	drw_text(drw, x, 0, w, bh, lrpad / 2, text, 0);
+	drw_rect(drw, 0, 0, mw, mh, 1, 1);
 
-  curpos = TEXTW(text) - TEXTW(&text[cursor]);
-  if ((curpos += lrpad / 2 - 1) < w) {
-    drw_setscheme(drw, scheme[SchemeNorm]);
-    drw_rect(drw, x + curpos, 2 + (bh - fh) / 2, 2, fh - 4, 1, 0);
+	/* draw input field (with placeholder if empty) */
+	w = (lines > 0 || !matches) ? mw - x : inputw;
+	if (text[0] == '\0' && prompt && *prompt) {
+		/* show prompt as placeholder inside the input field */
+		drw_setscheme(drw, scheme[SchemePlaceholder]);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, prompt, 0);
+	} else {
+		drw_setscheme(drw, scheme[SchemeNorm]);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, text, 0);
+	}
+
+  if (text[0] != '\0') {
+      curpos = TEXTW(text) - TEXTW(&text[cursor]);
+      if ((curpos += lrpad / 2 - 1) < w) {
+          drw_setscheme(drw, scheme[SchemeNorm]);
+          drw_rect(drw, x + curpos, 2 + (bh - fh) / 2, 2, fh - 4, 1, 0);
+      }
   }
 
-  if (lines > 0) {
-    /* draw vertical list */
-    for (item = curr; item != next; item = item->right)
-      drawitem(item, x, y += bh, mw - x);
-  } else if (matches) {
-    /* draw horizontal list */
-    x += inputw;
-    w = TEXTW("<");
-    if (curr->left) {
-      drw_setscheme(drw, scheme[SchemeNorm]);
-      drw_text(drw, x, 0, w, bh, lrpad / 2, "<", 0);
-    }
-    x += w;
-    for (item = curr; item != next; item = item->right)
-      x = drawitem(item, x, 0, textw_clamp(item->text, mw - x - TEXTW(">")));
-    if (next) {
-      w = TEXTW(">");
-      drw_setscheme(drw, scheme[SchemeNorm]);
-      drw_text(drw, mw - w, 0, w, bh, lrpad / 2, ">", 0);
-    }
-  }
-  drw_map(drw, win, 0, 0, mw, mh);
+	if (lines > 0) {
+		/* draw vertical list */
+		for (item = curr; item != next; item = item->right)
+			drawitem(item, x, y += bh, mw - x);
+	} else if (matches) {
+		/* draw horizontal list */
+		x += inputw;
+		w = TEXTW("<");
+		if (curr->left) {
+			drw_setscheme(drw, scheme[SchemeNorm]);
+			drw_text(drw, x, 0, w, bh, lrpad / 2, "<", 0);
+		}
+		x += w;
+		for (item = curr; item != next; item = item->right)
+			x = drawitem(item, x, 0,
+			             textw_clamp(item->text, mw - x - TEXTW(">")));
+		if (next) {
+			w = TEXTW(">");
+			drw_setscheme(drw, scheme[SchemeNorm]);
+			drw_text(drw, mw - w, 0, w, bh, lrpad / 2, ">", 0);
+		}
+	}
+	drw_map(drw, win, 0, 0, mw, mh);
 }
-
 static void grabfocus(void) {
   struct timespec ts = {.tv_sec = 0, .tv_nsec = 10000000};
   Window focuswin;
