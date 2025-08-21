@@ -26,7 +26,7 @@
 #define TEXTW(X) (drw_fontset_getwidth(drw, (X)) + lrpad)
 
 /* enums */
-enum { SchemeNorm, SchemeSel, SchemeOut, SchemePlaceholder, SchemeLast };
+enum { SchemeNorm, SchemeSel, SchemeOut, SchemePrompt, SchemeLast };
 
 struct item {
   char *text;
@@ -155,7 +155,7 @@ static void drawmenu(void)
 	w = (lines > 0 || !matches) ? mw - x : inputw;
 	if (text[0] == '\0' && prompt && *prompt) {
 		/* show prompt as placeholder inside the input field */
-		drw_setscheme(drw, scheme[SchemePlaceholder]);
+		drw_setscheme(drw, scheme[SchemePrompt]);
 		drw_text(drw, x, 0, w, bh, lrpad / 2, prompt, 0);
 	} else {
 		drw_setscheme(drw, scheme[SchemeNorm]);
