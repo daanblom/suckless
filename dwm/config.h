@@ -1,5 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 #include "movestack.c"
+#include "selfrestart.c"
 #define wal "/home/db/.cache/wal/colors-wal-dwm.h"
 
 static const unsigned int borderpx = 2; /* border pixel of windows */
@@ -88,7 +89,7 @@ static const char scratchpadname[] = "scratchpad";
 static const char *scratchpadcmd[] = {"st", "-t",     scratchpadname,
                                       "-g", "120x34", NULL};
 static const char *scratchpadprofanity[] = {
-    "st", "-t", scratchpadname, "-e", "ranger", "-g", "120x34", NULL};
+    "st", "-t", scratchpadname, "ranger", "-g", "120x34", NULL};
 
 static const Key keys[] = {
     /* modifier                     key        function        argument */
@@ -113,6 +114,7 @@ static const Key keys[] = {
     {MODKEY, XK_m, setlayout, {.v = &layouts[2]}},
     {MODKEY, XK_Tab, setlayout, {0}},
     /* { MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },*/
+    { MODKEY|ShiftMask,             XK_r,      self_restart,   {0} },
     {MODKEY, XK_0, view, {.ui = ~0}},
     {MODKEY | ShiftMask, XK_0, tag, {.ui = ~0}},
     {MODKEY, XK_comma, focusmon, {.i = -1}},
