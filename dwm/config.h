@@ -10,8 +10,9 @@ static const int showbar = 1;        /* 0 means no bar */
 static const int topbar = 1;         /* 0 means bottom bar */
 static const int vertpad = 20;       /* vertical padding of bar */
 static const int sidepad = 40;       /* horizontal padding of bar */
-static const char *fonts[] = {"SauceCodePro NF:size=12"};
+static const char *fonts[] = {"SauceCodePro NF:size=12", "NotoColorEmoji:pixelsize=25:antialias=true:autohint=true"};
 static const char dmenufont[] = {"SauceCodePro NF:size=12"};
+
 
 #if __has_include(wal)
 #include wal
